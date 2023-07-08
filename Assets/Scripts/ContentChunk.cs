@@ -1,4 +1,3 @@
-using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +11,7 @@ public class ContentChunk : MonoBehaviour
     public float maxX = 0.0f;
     public float minY = 0.0f;
     public float maxY = 0.0f;
-    List<Transform> chunkObjects; 
+    List<Transform> chunkObjects;
 
     // Start is called before the first frame update
     void Start()

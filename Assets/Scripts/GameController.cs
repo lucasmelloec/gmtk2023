@@ -1,5 +1,3 @@
-using Assets.Scripts;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,11 +29,9 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
     }
 
-    // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         var playerPos = player.transform.position;
         if (playerPos.x < leftmostCamCenterX)
@@ -65,7 +61,6 @@ public class GameController : MonoBehaviour
 
             while (oldestChunk.minX > GetCameraBoundEnd().x)
             {
-                Debug.Log("Should have deleted >:(");
                 contentChunks.Dequeue();
                 Destroy(oldestChunk.gameObject);
 
