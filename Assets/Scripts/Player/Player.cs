@@ -3,13 +3,12 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private const float moveSpeed = 7f;
-    [SerializeField] private const float glidingFactor = 0.6f;
-    [SerializeField] private const float jumpSpeed = 9.0f;
+    [SerializeField] private float moveSpeed = 7f;
+    [SerializeField] private float glidingFactor = 0.6f;
+    [SerializeField] private float jumpSpeed = 9.0f;
     [SerializeField] private LayerMask groundLayerMask;
     private PlayerInputActions playerInputActions;
     private Rigidbody2D rigidbody2d;
-    private bool canJump = false;
     private bool isGliding = false;
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D playerCollider;

@@ -5,7 +5,6 @@ using UnityEngine;
 public class ContentChunk : MonoBehaviour
 {
     Vector3 chunkCenter;
-    Transform customCamera;
     Platform platformPrefab;
     public float minX = 0.0f;
     public float maxX = 0.0f;
@@ -24,10 +23,9 @@ public class ContentChunk : MonoBehaviour
 
     }
 
-    public void InitializeParams(Vector3 chunkCenter, Transform customCamera, Platform platformPrefab)
+    public void InitializeParams(Vector3 chunkCenter, Platform platformPrefab)
     {
         this.chunkCenter = chunkCenter;
-        this.customCamera = customCamera;
         this.platformPrefab = platformPrefab;
 
         minX = chunkCenter.x - Constants.ChunkWidth / 2;
