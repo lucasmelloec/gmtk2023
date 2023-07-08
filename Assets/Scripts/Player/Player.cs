@@ -1,8 +1,10 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    public static Player singleton { get; private set; }
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float glidingFactor = 0.6f;
     [SerializeField] private float jumpSpeed = 9f;
@@ -17,6 +19,8 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
+        Assert.IsNull(singleton);
+        singleton = this;
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
         rigidbody2d = GetComponent<Rigidbody2D>();
@@ -59,11 +63,13 @@ public class Player : MonoBehaviour
     {
         Vector2 inputVector = playerInputActions.Player.Move.ReadValue<Vector2>();
         Vector2 newVelocity = new Vector2(inputVector.x * moveSpeed, rigidbody2d.velocity.y);
-        if(!isGliding && inputVector.y != 0 && !IsGrounded()) {
-          newVelocity.y += inputVector.y * fallSpeed;
+        if (!isGliding && inputVector.y != 0 && !IsGrounded())
+        {
+            newVelocity.y += inputVector.y * fallSpeed;
         }
-        if(newVelocity.y < terminalSpeed) {
-          newVelocity.y = terminalSpeed;
+        if (newVelocity.y < terminalSpeed)
+        {
+            newVelocity.y = terminalSpeed;
         }
         rigidbody2d.velocity = newVelocity;
     }

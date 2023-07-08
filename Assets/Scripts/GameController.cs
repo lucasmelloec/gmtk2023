@@ -17,10 +17,6 @@ public class GameController : MonoBehaviour
 
     void Start() {
       cameraController = CameraController.singleton;
-      Debug.Log($"Leftmost {leftmostContentX}");
-      Debug.Log($"Width {CameraController.singleton.cameraWidth}");
-      Debug.Log($"yUpperBound {yUpperBound}");
-      Debug.Log($"Height {CameraController.singleton.cameraHeight}");
     }
 
     void Update()

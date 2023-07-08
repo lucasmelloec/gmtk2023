@@ -1,24 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class FallingPlatform : MonoBehaviour
+public class FallingPlatform : Platform
 {
-    public GameObject player;
-    public float maxSecondsBeforeColorChange = 0.5F;
-    public float maxSecondsBeforeFall = 5.0F;
+    [SerializeField] private float maxSecondsBeforeColorChange = 0.5F;
+    [SerializeField] private float maxSecondsBeforeFall = 5.0F;
 
     private bool isFalling = false;
     private float timeSinceLastColorChange = 0.0F;
 
     private SpriteRenderer spriteRenderer;
     private Color initialColor;
+    private Player player;
 
     // Start is called before the first frame update
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         initialColor = spriteRenderer.color;
+        player = Player.singleton;
     }
 
     // Update is called once per frame
@@ -35,14 +34,14 @@ public class FallingPlatform : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject == player) {
+        if (collision.gameObject == player.gameObject) {
             isFalling = true;
             Destroy(this.gameObject, maxSecondsBeforeFall);
         }
     }
 
     void OnCollisionExit2D(Collision2D collision) {
-        if (collision.gameObject == player) {
+        if (collision.gameObject == player.gameObject) {
             isFalling = false;
         }
     }
