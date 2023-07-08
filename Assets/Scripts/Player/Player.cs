@@ -8,6 +8,8 @@ public class Player : MonoBehaviour {
   private Rigidbody2D rigidbody2d;
   private bool canJump = false;
   private bool isGliding = false;
+    private SpriteRenderer spriteRenderer;
+    private float jumpSpeed = 9.0f;
 
   private void Awake() {
     playerInputActions = new PlayerInputActions();
@@ -15,6 +17,8 @@ public class Player : MonoBehaviour {
     playerInputActions.Player.Glide.started += PlayerInputActions_Glide_Started;
     playerInputActions.Player.Glide.canceled += PlayerInputActions_Glide_Canceled;
     rigidbody2d = GetComponent<Rigidbody2D>();
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
   }
 
   private void FixedUpdate() {
@@ -22,7 +26,20 @@ public class Player : MonoBehaviour {
     HandleGlide();
   }
 
-  private void HandleMovement() {
+private void Update()
+{
+        if (isGliding)
+        {
+            spriteRenderer.color = Color.blue;
+        }
+        else
+        {
+            spriteRenderer.color = Color.white;
+        }
+        transform.rotation = Quaternion.identity;
+}
+
+    private void HandleMovement() {
     Vector2 inputVector = playerInputActions.Player.Move.ReadValue<Vector2>();
     rigidbody2d.velocity = new Vector2(inputVector.x * moveSpeed, rigidbody2d.velocity.y);
   }
@@ -36,7 +53,7 @@ public class Player : MonoBehaviour {
 
   private void HandleJump() {
     if (canJump) {
-      rigidbody2d.velocity = new Vector2(0f, 3f);
+      rigidbody2d.velocity = new Vector2(0f, jumpSpeed);
       canJump = false;
     }
   }
