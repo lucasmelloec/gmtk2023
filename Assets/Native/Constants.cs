@@ -20,6 +20,6 @@ namespace Assets.Native
         public static float PlatformNoOverlapHeight = 12;
 
         public static int CloudCountPerChunk = 60;
-        public static float CloudPlayableAreaDistance = 15;
+        public static float CloudPlayableAreaDistance = 10;
     }
 }

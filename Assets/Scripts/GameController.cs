@@ -42,7 +42,7 @@ public class GameController : MonoBehaviour
         {
             var oldestChunk = contentChunks.Peek();
 
-            while (oldestChunk.minX > GetCameraBoundEnd().x)
+            while (oldestChunk.minX - 60 > GetCameraBoundEnd().x)
             {
                 contentChunks.Dequeue();
                 Destroy(oldestChunk.gameObject);

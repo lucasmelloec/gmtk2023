@@ -12,5 +12,21 @@ namespace Assets.Native
         {
             return x * Constants.PlayableAreaInclineFactor;
         }
+
+        public static float Clamp(float val, float minVal, float maxVal)
+        {
+            if (val < minVal)
+            {
+                return minVal;
+            }
+            if (val > maxVal)
+            {
+                return maxVal;
+            }
+            else
+            {
+                return val;
+            }
+        }
     }
 }

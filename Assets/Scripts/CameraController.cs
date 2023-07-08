@@ -1,3 +1,4 @@
+using Assets.Native;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -46,7 +47,12 @@ public class CameraController : MonoBehaviour
             leftmostCamCenterX -= cameraSpeed * Time.deltaTime;
         }
 
-        transform.position = new Vector3(leftmostCamCenterX, playerTransform.position.y, fixedCamZ);
+        var playableCenterY = Utilities.GetYCenterAt(playerTransform.position.x);
+        var yPosition = Utilities.Clamp(
+            playerTransform.position.y,
+            playableCenterY - Constants.PlayableAreaHeight / 2.0f,
+            playableCenterY + Constants.PlayableAreaHeight / 2.0f);
+        transform.position = new Vector3(leftmostCamCenterX, yPosition, fixedCamZ);
     }
 
     private IEnumerator StartAutoCameraMovement()
