@@ -11,11 +11,15 @@ public class Player : MonoBehaviour
     [SerializeField] private float terminalSpeed = -50f;
     [SerializeField] private float fallSpeed = 10f;
     [SerializeField] private LayerMask groundLayerMask;
+    [SerializeField] private float coyoteTime = 0.3f;
     private PlayerInputActions playerInputActions;
     private Rigidbody2D rigidbody2d;
     private bool isGliding = false;
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D playerCollider;
+    private float timeElapsedSinceGrounded;
+    private bool isCurrentlyGrounded;
+    private Vector2 inputVector;
 
     private void Awake()
     {
@@ -42,6 +46,16 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        inputVector = playerInputActions.Player.Move.ReadValue<Vector2>();
+        isCurrentlyGrounded = IsGrounded();
+        if (isCurrentlyGrounded)
+        {
+            timeElapsedSinceGrounded = 0f;
+        }
+        else
+        {
+            timeElapsedSinceGrounded += Time.deltaTime;
+        }
         if (isGliding)
         {
             spriteRenderer.color = Color.blue;
@@ -61,9 +75,8 @@ public class Player : MonoBehaviour
 
     private void HandleMovement()
     {
-        Vector2 inputVector = playerInputActions.Player.Move.ReadValue<Vector2>();
         Vector2 newVelocity = new Vector2(inputVector.x * moveSpeed, rigidbody2d.velocity.y);
-        if (!isGliding && inputVector.y != 0 && !IsGrounded())
+        if (!isGliding && inputVector.y != 0 && !isCurrentlyGrounded)
         {
             newVelocity.y += inputVector.y * fallSpeed;
         }
@@ -84,7 +97,10 @@ public class Player : MonoBehaviour
 
     private void HandleJump()
     {
-        rigidbody2d.velocity = new Vector2(0f, jumpSpeed);
+        if (IsGrounded() || timeElapsedSinceGrounded <= coyoteTime)
+        {
+            rigidbody2d.velocity = new Vector2(0f, jumpSpeed);
+        }
     }
 
     private void PlayerInputActions_Glide_Canceled(InputAction.CallbackContext context)
@@ -94,10 +110,7 @@ public class Player : MonoBehaviour
 
     private void PlayerInputActions_Glide_Started(InputAction.CallbackContext context)
     {
-        if (IsGrounded())
-        {
-            HandleJump();
-        }
+        HandleJump();
         isGliding = true;
     }
 
