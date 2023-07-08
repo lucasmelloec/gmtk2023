@@ -692,7 +692,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0.94715023, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -710,7 +710,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1429802625}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.07, y: 0.11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -737,6 +737,7 @@ MonoBehaviour:
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  coyoteTime: 0.3
 --- !u!61 &1429802631
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -814,6 +815,7 @@ MonoBehaviour:
   player: {fileID: 1429802630}
   contentChunkPrefab: {fileID: 2374228016592576103, guid: b8f458d19b907b74ab74226a73da9389, type: 3}
   platformPrefab: {fileID: 2116645871834406134, guid: 7255ee07eb5159f48a286213589a0670, type: 3}
+  cloudPrefab: {fileID: 99288475354765782, guid: 335a6ff1bf7cee94a9782db2d2dab2ab, type: 3}
 --- !u!4 &1527309041
 Transform:
   m_ObjectHideFlags: 0

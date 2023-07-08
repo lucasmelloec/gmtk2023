@@ -7,6 +7,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private Player player;
     [SerializeField] private ContentChunk contentChunkPrefab;
     [SerializeField] private Platform platformPrefab;
+    [SerializeField] private Transform cloudPrefab;
 
     private float leftmostContentX = -10f;
     private const float contentBufferWidthX = 30;
@@ -31,7 +32,7 @@ public class GameController : MonoBehaviour
         {
             var newCenter = new Vector3(leftmostContentX - Constants.ChunkWidth / 2, 0);
             var newChunk = Instantiate(contentChunkPrefab);
-            newChunk.InitializeParams(newCenter, platformPrefab);
+            newChunk.InitializeParams(newCenter, platformPrefab, cloudPrefab);
 
             leftmostContentX = newChunk.minX;
             contentChunks.Enqueue(newChunk);
