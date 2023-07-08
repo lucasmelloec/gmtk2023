@@ -26,7 +26,8 @@ public class FallingPlatform : Platform
         if (!isFalling) return;
 
         timeSinceLastColorChange += Time.deltaTime;
-        if (timeSinceLastColorChange >= maxSecondsBeforeColorChange) {
+        if (timeSinceLastColorChange >= maxSecondsBeforeColorChange)
+        {
             timeSinceLastColorChange = 0.0F;
             spriteRenderer.color = spriteRenderer.color == initialColor ? Color.red : initialColor;
         }
@@ -34,14 +35,17 @@ public class FallingPlatform : Platform
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject == player.gameObject) {
+        if (collision.gameObject == player.gameObject)
+        {
             isFalling = true;
             Destroy(this.gameObject, maxSecondsBeforeFall);
         }
     }
 
-    void OnCollisionExit2D(Collision2D collision) {
-        if (collision.gameObject == player.gameObject) {
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject == player.gameObject)
+        {
             isFalling = false;
         }
     }
