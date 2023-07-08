@@ -1,3 +1,4 @@
+using Assets.Native;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,17 +10,43 @@ public class ContentChunk : MonoBehaviour
     public float maxX = 0.0f;
     public float minY = 0.0f;
     public float maxY = 0.0f;
-    List<Transform> chunkObjects;
+    List<Transform> chunkObjects = new List<Transform>();
 
     void Start()
     {
         for (var i = 0; i < 10; i++)
         {
-            var x = Random.Range(minX, maxX);
-            var y = Random.Range(minY, maxY);
+            var x = float.NaN;
+            var y = float.NaN;
+            var collides = false;
 
-            var newPlat = Instantiate(platformPrefab, transform);
-            newPlat.transform.position = new Vector3(x, y, 0);
+            x = Random.Range(minX, maxX);
+            y = Random.Range(minY, maxY);
+
+            // 5 tentativas de colocar a plataforma
+            for (var j = 0; j < 5; j++)
+            {
+                x = Random.Range(minX, maxX);
+                y = Random.Range(minY, maxY);
+
+                collides = false;
+
+                foreach (var chunkObject in chunkObjects)
+                {
+                    if (Platform.Intersects(chunkObject.position, new Vector3(x, y, 0)))
+                    {
+                        collides = true;
+                    }
+                }
+
+                if (!collides)
+                {
+                    var newPlat = Instantiate(platformPrefab, transform);
+                    newPlat.transform.position = new Vector3(x, y, 0);
+                    chunkObjects.Add(newPlat.transform);
+                    break;
+                }
+            }
         }
     }
 
@@ -32,6 +59,5 @@ public class ContentChunk : MonoBehaviour
         maxX = chunkCenter.x + Constants.ChunkWidth / 5;
         minY = Constants.ChunkMinY + chunkCenter.x / 2;
         maxY = Constants.ChunkMaxY + chunkCenter.x / 2;
-
     }
 }

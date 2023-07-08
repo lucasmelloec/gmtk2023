@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Assets.Native;
 
 public class GameController : MonoBehaviour
 {
