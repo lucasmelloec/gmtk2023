@@ -8,18 +8,25 @@ public class GameController : MonoBehaviour
     [SerializeField] private Platform platformPrefab;
 
     private float leftmostContentX = -10f;
-
     private const float contentBufferWidthX = 30;
     private const float yUpperBound = 20;
     private const float yLowerBound = -20;
+    private CameraController cameraController;
 
     private static Queue<ContentChunk> contentChunks = new Queue<ContentChunk>();
+
+    void Start() {
+      cameraController = CameraController.singleton;
+      Debug.Log($"Leftmost {leftmostContentX}");
+      Debug.Log($"Width {CameraController.singleton.cameraWidth}");
+      Debug.Log($"yUpperBound {yUpperBound}");
+      Debug.Log($"Height {CameraController.singleton.cameraHeight}");
+    }
 
     void Update()
     {
         PopulateWithContent();
     }
-
 
     void PopulateWithContent()
     {
@@ -51,12 +58,12 @@ public class GameController : MonoBehaviour
     Vector3 GetCameraBoundStart()
     {
         // set up correct bound later;
-          return CameraController.singleton.GetCurrentPosition() - new Vector3(21.5f, -10);
+          return cameraController.GetCurrentPosition() - new Vector3(cameraController.cameraWidth / 2, -cameraController.cameraHeight / 2);
     }
 
     Vector3 GetCameraBoundEnd()
     {
         // set up correct bound later;
-        return CameraController.singleton.GetCurrentPosition() + new Vector3(21.5f, -10);
+        return cameraController.GetCurrentPosition() + new Vector3(cameraController.cameraWidth / 2, -cameraController.cameraHeight / 2);
     }
 }

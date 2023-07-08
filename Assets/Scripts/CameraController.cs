@@ -4,7 +4,9 @@ using UnityEngine.Assertions;
 
 public class CameraController : MonoBehaviour
 {
-    public static CameraController singleton { get; set; }
+    public static CameraController singleton { get; private set; }
+    public float cameraWidth { get; private set; }
+    public float cameraHeight { get; private set; }
 
     [SerializeField] private Transform playerTransform;
     [SerializeField] private float cameraSpeed = 1f;
@@ -22,6 +24,9 @@ public class CameraController : MonoBehaviour
     {
         Assert.IsNull(singleton);
         singleton = this;
+        Camera mainCamera = Camera.main;
+        cameraHeight = mainCamera.orthographicSize * 2;
+        cameraWidth = mainCamera.aspect * mainCamera.orthographicSize * 2;
     }
 
     private void Start()

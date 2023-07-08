@@ -5,7 +5,9 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float glidingFactor = 0.6f;
-    [SerializeField] private float jumpSpeed = 9.0f;
+    [SerializeField] private float jumpSpeed = 9f;
+    [SerializeField] private float terminalSpeed = -50f;
+    [SerializeField] private float fallSpeed = 10f;
     [SerializeField] private LayerMask groundLayerMask;
     private PlayerInputActions playerInputActions;
     private Rigidbody2D rigidbody2d;
@@ -56,7 +58,14 @@ public class Player : MonoBehaviour
     private void HandleMovement()
     {
         Vector2 inputVector = playerInputActions.Player.Move.ReadValue<Vector2>();
-        rigidbody2d.velocity = new Vector2(inputVector.x * moveSpeed, rigidbody2d.velocity.y);
+        Vector2 newVelocity = new Vector2(inputVector.x * moveSpeed, rigidbody2d.velocity.y);
+        if(!isGliding && inputVector.y != 0 && !IsGrounded()) {
+          newVelocity.y += inputVector.y * fallSpeed;
+        }
+        if(newVelocity.y < terminalSpeed) {
+          newVelocity.y = terminalSpeed;
+        }
+        rigidbody2d.velocity = newVelocity;
     }
 
     private void HandleGlide()
