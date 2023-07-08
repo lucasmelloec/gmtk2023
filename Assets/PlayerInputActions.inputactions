@@ -2,7 +2,7 @@
     "name": "PlayerInputActions",
     "maps": [
         {
-            "name": "PlayerInput",
+            "name": "Player",
             "id": "90ea7b8a-91b9-4867-a395-ec969ad20af5",
             "actions": [
                 {
@@ -11,7 +11,7 @@
                     "id": "6de1d9f0-7c9a-4b90-9c27-69b535cf7b91",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Hold",
                     "initialStateCheck": false
                 },
                 {
@@ -57,17 +57,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "up",
-                    "id": "243ec729-7d9b-4f64-b6f3-094679eccf9c",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "down",
                     "id": "a6b6850c-2655-4708-9b53-529c439d33e6",
                     "path": "<Keyboard>/s",
@@ -110,17 +99,6 @@
                     "action": "Move",
                     "isComposite": true,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "2163c4f2-8317-463b-94a5-75acfbb7a698",
-                    "path": "<Keyboard>/upArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 },
                 {
                     "name": "down",
