@@ -6,25 +6,36 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     public static Player singleton { get; private set; }
+    public event Action<bool> onIsGlidingChanged;
+
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float glidingFactor = 0.4f; // 1 = total glide, 0 = no glide
     [SerializeField] private float jumpSpeed = 9f;
-    [SerializeField] private float terminalSpeed = -50f;
+    [SerializeField] private float terminalSpeed = 50f;
     [SerializeField] private float fallSpeed = 10f;
     [SerializeField] private LayerMask groundLayerMask;
     [SerializeField] private float coyoteTime = 0.3f;
     [SerializeField] private float perfectGlideTime = 0.5f;
     [SerializeField] private float taperedGlideTime = 2f;
+    [SerializeField] private BoxCollider2D playerCollider;
     private PlayerInputActions playerInputActions;
     private Rigidbody2D rigidbody2d;
-    private bool isGliding = false;
     private float storedGlideTime = 0.0f;
     private DateTime glideStartTime = DateTime.Now - TimeSpan.FromDays(1);
     private SpriteRenderer spriteRenderer;
-    private BoxCollider2D playerCollider;
     private float timeElapsedSinceGrounded;
     private bool isCurrentlyGrounded;
     private Vector2 inputVector;
+    private bool _isGliding = false;
+    private bool isGliding
+    {
+        get => _isGliding;
+        set
+        {
+            _isGliding = value;
+            onIsGlidingChanged?.Invoke(_isGliding);
+        }
+    }
 
     private void Awake()
     {
@@ -34,8 +45,6 @@ public class Player : MonoBehaviour
         playerInputActions.Player.Enable();
         rigidbody2d = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        playerCollider = GetComponent<BoxCollider2D>();
-
         storedGlideTime = perfectGlideTime + taperedGlideTime;
     }
 
@@ -64,14 +73,6 @@ public class Player : MonoBehaviour
         {
             timeElapsedSinceGrounded += Time.deltaTime;
         }
-        if (isGliding)
-        {
-            spriteRenderer.color = Color.blue;
-        }
-        else
-        {
-            spriteRenderer.color = Color.white;
-        }
         transform.rotation = Quaternion.identity;
     }
 
@@ -88,9 +89,9 @@ public class Player : MonoBehaviour
         {
             newVelocity.y += inputVector.y * fallSpeed;
         }
-        if (newVelocity.y < terminalSpeed)
+        if (Mathf.Abs(newVelocity.y) > terminalSpeed)
         {
-            newVelocity.y = terminalSpeed;
+            newVelocity.y = newVelocity.y < 0 ? -terminalSpeed : terminalSpeed;
         }
         rigidbody2d.velocity = newVelocity;
     }
@@ -123,7 +124,7 @@ public class Player : MonoBehaviour
 
     private void HandleJump()
     {
-        if (IsGrounded() || timeElapsedSinceGrounded <= coyoteTime)
+        if (IsGrounded() || (timeElapsedSinceGrounded <= coyoteTime && rigidbody2d.velocity.y <= 0))
         {
             rigidbody2d.velocity = new Vector2(0f, jumpSpeed);
         }
@@ -147,8 +148,8 @@ public class Player : MonoBehaviour
 
     private bool IsGrounded()
     {
-        float groundDistance = 0.1f;
-        var raycastHit = Physics2D.BoxCast(playerCollider.bounds.center, playerCollider.bounds.size, 0f, Vector2.down, groundDistance, groundLayerMask);
+        float extraGroundDistance = 0.1f;
+        var raycastHit = Physics2D.BoxCast(playerCollider.bounds.center, playerCollider.bounds.size, 0f, Vector2.down, extraGroundDistance, groundLayerMask);
         /* Color rayColor; */
         /* if (raycastHit.collider != null) */
         /* { */
@@ -158,9 +159,9 @@ public class Player : MonoBehaviour
         /* { */
         /*     rayColor = Color.red; */
         /* } */
-        /* Debug.DrawRay(playerCollider.bounds.center + new Vector3(playerCollider.bounds.extents.x, 0), Vector2.down * (playerCollider.bounds.extents.y + groundDistance), rayColor); */
-        /* Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, 0), Vector2.down * (playerCollider.bounds.extents.y + groundDistance), rayColor); */
-        /* Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, playerCollider.bounds.extents.y + groundDistance), Vector2.right * 2 * playerCollider.bounds.extents.x, rayColor); */
+        /* Debug.DrawRay(playerCollider.bounds.center + new Vector3(playerCollider.bounds.extents.x, 0), Vector2.down * (playerCollider.bounds.extents.y + extraGroundDistance), rayColor); */
+        /* Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, 0), Vector2.down * (playerCollider.bounds.extents.y + extraGroundDistance), rayColor); */
+        /* Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, playerCollider.bounds.extents.y + extraGroundDistance), Vector2.right * 2 * playerCollider.bounds.extents.x, rayColor); */
         return raycastHit.collider != null;
     }
 }
