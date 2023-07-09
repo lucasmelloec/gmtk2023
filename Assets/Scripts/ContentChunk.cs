@@ -6,12 +6,15 @@ public class ContentChunk : MonoBehaviour
 {
     Vector3 chunkCenter;
     Platform platformPrefab;
+    FallingPlatform fallingPlatformPrefab;
     Transform cloudPrefab;
     public float minX = 0.0f;
     public float maxX = 0.0f;
     public float minY = 0.0f;
     public float maxY = 0.0f;
     List<Transform> chunkObjects = new List<Transform>();
+
+    public float fallingPlatformChance = 0.0f;
 
     void Start()
     {
@@ -42,7 +45,12 @@ public class ContentChunk : MonoBehaviour
 
                 if (!collides)
                 {
-                    var newPlat = Instantiate(platformPrefab, transform);
+                    var prefab = platformPrefab;
+                    if (Random.Range(0f, 1f) < fallingPlatformChance)
+                    {
+                        prefab = fallingPlatformPrefab;
+                    }
+                    var newPlat = Instantiate(prefab, transform);
                     newPlat.transform.position = new Vector3(x, y, 0);
                     chunkObjects.Add(newPlat.transform);
                     break;
@@ -72,11 +80,18 @@ public class ContentChunk : MonoBehaviour
         newCloud.position = new Vector3(x, y, 0);
     }
 
-    public void InitializeParams(Vector3 chunkCenter, Platform platformPrefab, Transform cloudPrefab)
+    public void InitializeParams(
+        Vector3 chunkCenter,
+        Platform platformPrefab,
+        FallingPlatform fallingPlatformPrefab,
+        Transform cloudPrefab,
+        float fallingPlatformChance)
     {
         this.chunkCenter = chunkCenter;
         this.platformPrefab = platformPrefab;
+        this.fallingPlatformPrefab = fallingPlatformPrefab;
         this.cloudPrefab = cloudPrefab;
+        this.fallingPlatformChance = fallingPlatformChance;
 
         minX = chunkCenter.x - Constants.ChunkWidth / 2;
         maxX = chunkCenter.x + Constants.ChunkWidth / 5;

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FallingPlatform : Platform
 {
-    [SerializeField] private float maxSecondsBeforeColorChange = 0.5F;
+    [SerializeField] private float maxSecondsBeforeColorChange = 0.1F;
     [SerializeField] private float maxSecondsBeforeFall = 5.0F;
 
     private bool isFalling = false;

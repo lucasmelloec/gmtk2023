@@ -817,6 +817,7 @@ MonoBehaviour:
   player: {fileID: 1429802630}
   contentChunkPrefab: {fileID: 2374228016592576103, guid: b8f458d19b907b74ab74226a73da9389, type: 3}
   platformPrefab: {fileID: 2116645871834406134, guid: 7255ee07eb5159f48a286213589a0670, type: 3}
+  fallingPlatformPrefab: {fileID: 829140260153759990, guid: 18fc4e970041ec901b230fbb978e9be1, type: 3}
   cloudPrefab: {fileID: 99288475354765782, guid: 335a6ff1bf7cee94a9782db2d2dab2ab, type: 3}
 --- !u!4 &1527309041
 Transform:

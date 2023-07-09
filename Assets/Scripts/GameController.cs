@@ -7,6 +7,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private Player player;
     [SerializeField] private ContentChunk contentChunkPrefab;
     [SerializeField] private Platform platformPrefab;
+    [SerializeField] private FallingPlatform fallingPlatformPrefab;
     [SerializeField] private Transform cloudPrefab;
 
     private float leftmostContentX = -10f;
@@ -18,7 +19,7 @@ public class GameController : MonoBehaviour
     private static Queue<ContentChunk> contentChunks = new Queue<ContentChunk>();
 
     void Start() {
-      cameraController = CameraController.singleton;
+        cameraController = CameraController.singleton;
     }
 
     void Update()
@@ -32,7 +33,7 @@ public class GameController : MonoBehaviour
         {
             var newCenter = new Vector3(leftmostContentX - Constants.ChunkWidth / 2, 0);
             var newChunk = Instantiate(contentChunkPrefab);
-            newChunk.InitializeParams(newCenter, platformPrefab, cloudPrefab);
+            newChunk.InitializeParams(newCenter, platformPrefab, fallingPlatformPrefab, cloudPrefab, Utilities.Clamp((-newCenter.x)/150, 0f, 0.6f));
 
             leftmostContentX = newChunk.minX;
             contentChunks.Enqueue(newChunk);
