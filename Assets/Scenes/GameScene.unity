@@ -291,7 +291,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 16
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -477,7 +477,7 @@ MonoBehaviour:
   m_Follow: {fileID: 1321840052}
   m_Lens:
     FieldOfView: 34
-    OrthographicSize: 10
+    OrthographicSize: 16
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -738,6 +738,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   coyoteTime: 0.3
+  perfectGlideTime: 2
+  taperedGlideTime: 2
 --- !u!61 &1429802631
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -10,7 +10,7 @@ public class CameraController : MonoBehaviour
     public float cameraHeight { get; private set; }
 
     [SerializeField] private Transform playerTransform;
-    [SerializeField] private float cameraSpeed = 1f;
+    [SerializeField] private float cameraSpeed = 1.5f;
     [SerializeField] private float autoMoveCameraTimer = 2f;
     private float leftmostCamCenterX = 0.0f;
     private const float fixedCamZ = -10;
