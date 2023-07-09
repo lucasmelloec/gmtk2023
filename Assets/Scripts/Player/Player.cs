@@ -40,6 +40,9 @@ public class Player : MonoBehaviour
         }
     }
     private CameraController cameraController;
+    private float lastJumpPressed;
+    private float jumpBuffer = 0.2f;
+    private bool isJumping;
 
     private void Awake()
     {
@@ -66,6 +69,7 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         HandleMovement();
+        HandleJump();
         HandleGlide();
     }
 
@@ -109,7 +113,8 @@ public class Player : MonoBehaviour
 
     private void HandleGlide()
     {
-        if (!isGliding || rigidbody2d.velocity.y >= 0 || IsGrounded()) return;
+        float minimumGlideSpeed = -8f;
+        if (!isGliding || rigidbody2d.velocity.y >= 0 || IsGrounded() || rigidbody2d.velocity.y >= minimumGlideSpeed) return;
         var now = DateTime.Now;
         var secondsGliding = (float)(now - glideStartTime).TotalSeconds;
         if (secondsGliding > perfectGlideTime + taperedGlideTime)
@@ -135,8 +140,9 @@ public class Player : MonoBehaviour
 
     private void HandleJump()
     {
-        if (IsGrounded() || (timeElapsedSinceGrounded <= coyoteTime && rigidbody2d.velocity.y <= 0))
+        if ((isJumping && lastJumpPressed + jumpBuffer > Time.time) && (IsGrounded() || (timeElapsedSinceGrounded <= coyoteTime && rigidbody2d.velocity.y <= 0)))
         {
+            isJumping = false;
             rigidbody2d.velocity = new Vector2(0f, jumpSpeed);
         }
     }
@@ -149,7 +155,8 @@ public class Player : MonoBehaviour
 
     private void PlayerInputActions_Glide_Started(InputAction.CallbackContext context)
     {
-        HandleJump();
+        lastJumpPressed = Time.time;
+        isJumping = true;
         if (storedGlideTime > 0)
         {
             isGliding = true;
