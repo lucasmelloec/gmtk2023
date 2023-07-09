@@ -541,8 +541,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 1429802629}
-  cameraSpeed: 1
+  cameraSpeed: 2
   autoMoveCameraTimer: 2
+  maxCameraSpeed: 5
+  cameraSpeedupFactor: 0.05
 --- !u!4 &1321840052
 Transform:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 using Assets.Native;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -10,11 +11,14 @@ public class CameraController : MonoBehaviour
     public float cameraHeight { get; private set; }
 
     [SerializeField] private Transform playerTransform;
-    [SerializeField] private float cameraSpeed = 1.5f;
+    [SerializeField] private float cameraSpeed = 5f;
     [SerializeField] private float autoMoveCameraTimer = 2f;
+    [SerializeField] private float maxCameraSpeed = 15f;
+    [SerializeField] private float cameraSpeedupFactor = 0.05f;
     private float leftmostCamCenterX = 0.0f;
     private const float fixedCamZ = -10;
     private bool autoMoveCamera;
+    private DateTime gameStartTime = DateTime.Now;
 
     public Vector3 GetCurrentPosition()
     {
@@ -44,10 +48,12 @@ public class CameraController : MonoBehaviour
         }
         if (autoMoveCamera)
         {
-            leftmostCamCenterX -= cameraSpeed * Time.deltaTime;
+            var elapsedSeconds = (float)(DateTime.Now - gameStartTime).TotalSeconds;
+            var dynamicCameraSpeed = Utilities.Clamp(cameraSpeed + cameraSpeedupFactor * elapsedSeconds, 0, maxCameraSpeed);
+            leftmostCamCenterX -= dynamicCameraSpeed * Time.deltaTime;
         }
 
-        var playableCenterY = Utilities.GetYCenterAt(playerTransform.position.x);
+        var playableCenterY = Utilities.GetYCenterAt(leftmostCamCenterX);
         var yPosition = Utilities.Clamp(
             playerTransform.position.y,
             playableCenterY - Constants.PlayableAreaHeight / 2.0f,
@@ -57,6 +63,7 @@ public class CameraController : MonoBehaviour
 
     private IEnumerator StartAutoCameraMovement()
     {
+        gameStartTime = DateTime.Now;
         yield return new WaitForSeconds(autoMoveCameraTimer);
         autoMoveCamera = true;
     }
