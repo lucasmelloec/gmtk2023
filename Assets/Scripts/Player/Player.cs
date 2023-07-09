@@ -154,6 +154,12 @@ public class Player : MonoBehaviour
             );
         }
 
+        float extraDistance = 0.1f;
+        var raycastHit = Physics2D.BoxCast(playerCollider.bounds.center, playerCollider.bounds.size, 0f, moveDirection, extraDistance, groundLayerMask);
+        if(raycastHit.collider != null) {
+          newVelocity.x = 0f;
+        }
+
         rigidbody2d.velocity = newVelocity;
     }
 

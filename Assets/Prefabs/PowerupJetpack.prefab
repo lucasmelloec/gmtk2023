@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5685897294772345931}
-  - component: {fileID: 2545659640203481618}
   - component: {fileID: 1992623683355097241}
   m_Layer: 8
   m_Name: PowerupJetpack
@@ -34,20 +33,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2545659640203481618
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3957999965635572945}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ab65d60578af0bd687dbb0dee8742d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
-  platform: {fileID: 0}
 --- !u!61 &1992623683355097241
 BoxCollider2D:
   m_ObjectHideFlags: 0
