@@ -17,7 +17,15 @@ MonoBehaviour:
   - {fileID: 1935300455392668562, guid: 7255ee07eb5159f48a286213589a0670, type: 3}
   - {fileID: 6465612884795057552, guid: 18fc4e970041ec901b230fbb978e9be1, type: 3}
   platformWeights:
-  - 100
-  - 1
-  powerUpPrefabs: []
-  powerUpAmountMinMax: []
+  - 10
+  - 5
+  powerUpPrefabs:
+  - {fileID: 5685897294772345931, guid: 481a374038e130f449d4346247126455, type: 3}
+  powerUpAmountMinMax:
+  - {x: 0, y: 1}
+  platformCount: 7
+  weightSequence:
+  - {x: 100, y: 0}
+  - {x: 300, y: 5}
+  - {x: 500, y: 1}
+  - {x: 1000, y: 0}

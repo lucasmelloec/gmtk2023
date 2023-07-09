@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Native;
 using TMPro;
 using UnityEngine;
@@ -23,7 +24,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private Transform cloudPrefab;
     [SerializeField] private Transform scoreCounter;
 
-    [SerializeField] private DifficultySetting basicChunk;
+    [SerializeField] private List<DifficultySetting> chunks;
 
     private float leftmostContentX = -10f;
     private const float contentBufferWidthX = 30;
@@ -61,7 +62,7 @@ public class GameController : MonoBehaviour
             new Vector3(-5, -5, 0),
             new Vector3(-100, -50, 0)
         },
-        5);
+        5, 0.0f);
     }
 
     void Update()
@@ -96,13 +97,65 @@ public class GameController : MonoBehaviour
         textMesh.text = $"Score: {score}";
     }
 
+    public DifficultySetting SelectChunk(float x)
+    {
+        x = -x;
+
+        var cumulativeProbabilities = new List<float>(chunks.Count);
+        for (int i = 0; i < chunks.Count; i++)
+        {
+            var currentWeight = GetChunkWeight(chunks[i], x);
+            cumulativeProbabilities.Add(currentWeight);
+        }
+
+        var totalWeight = cumulativeProbabilities.Sum();
+        var runningProbability = 0.0f;
+        for (int i = 0; i < chunks.Count; i++)
+        {
+            runningProbability += cumulativeProbabilities[i] / totalWeight;
+            cumulativeProbabilities[i] = runningProbability;
+        }
+
+
+        var dice = UnityEngine.Random.Range(0f, 1f);
+        for (int i = 0; i < chunks.Count; i++)
+        {
+            if (dice <= cumulativeProbabilities[i])
+            {
+                return chunks[i];
+            }
+        }
+
+        return chunks.Last();
+    }
+
+    public float GetChunkWeight(DifficultySetting chunk, float x)
+    {
+        if (chunk.weightSequence.Count == 0) return 0.0f;
+        if (x > chunk.weightSequence.Last().x) return chunk.weightSequence.Last().y;
+
+        for (int i = chunk.weightSequence.Count - 2; i >= 0; i--)
+        {
+            var currentPoint = chunk.weightSequence[i];
+            var nextPoint = chunk.weightSequence[i + 1];
+            if (x >= currentPoint.x)
+            {
+                return (x - currentPoint.x) / (nextPoint.x - currentPoint.x) * (nextPoint.y - currentPoint.y) + currentPoint.y;
+            }
+        }
+
+        return 0.0f;
+    }
+
     void PopulateWithContent()
     {
         while (GetCameraBoundStart().x < leftmostContentX + Constants.ChunkWidth)
         {
             var newCenter = new Vector3(leftmostContentX - Constants.ChunkWidth / 2, 0);
             var newChunk = Instantiate(contentChunkPrefab);
-            newChunk.InitializeParams(newCenter, cloudPrefab, basicChunk);
+            var selectedDifficulty = SelectChunk(newCenter.x);
+            Debug.Log($"Selected a {selectedDifficulty.name}");
+            newChunk.InitializeParams(newCenter, cloudPrefab, selectedDifficulty);
 
             leftmostContentX = newChunk.minX;
             contentChunks.Enqueue(newChunk);

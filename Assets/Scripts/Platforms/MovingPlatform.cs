@@ -12,6 +12,7 @@ public class MovingPlatform : MonoBehaviour
     bool started = false;
     DateTime platformStart;
     bool playerOnTop = false;
+    float initialPathPositionPercentage = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -29,8 +30,8 @@ public class MovingPlatform : MonoBehaviour
     void Update()
     {
         var elapsedTime = (DateTime.Now - platformStart).TotalSeconds;
-        var currentLinearPos = elapsedTime * speed;
         var maxLinearPos = waypointPositions.Last();
+        var currentLinearPos = elapsedTime * speed + initialPathPositionPercentage * maxLinearPos;
 
         var completeRounds = (int)(currentLinearPos / maxLinearPos);
         currentLinearPos = currentLinearPos - completeRounds * maxLinearPos;
@@ -56,10 +57,11 @@ public class MovingPlatform : MonoBehaviour
         }
     }
 
-    public void InitializeParams(List<Vector3> waypoints, float speed)
+    public void InitializeParams(List<Vector3> waypoints, float speed, float pathPositionPercentage)
     {
         this.waypoints = waypoints;
         this.speed = speed;
+        this.initialPathPositionPercentage = pathPositionPercentage;
 
         if ((waypoints.Last() - waypoints.First()).magnitude > 0.01f)
         {

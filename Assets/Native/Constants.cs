@@ -11,7 +11,7 @@ namespace Assets.Native
         public static float PlayableAreaInclineFactor = 0.5f;
         public static float PlayableAreaHeight = 40;
 
-        public static float ChunkWidth = 40;
+        public static float ChunkWidth = 50;
         public static float ChunkMaxY = 20;
         public static float ChunkMinY = -20;
 

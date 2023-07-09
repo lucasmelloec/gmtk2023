@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class ContentChunk : MonoBehaviour
 {
+    [SerializeField] MovingPlatform movingPlatformPrefab;
     Vector3 chunkCenter;
     Transform cloudPrefab;
     public float minX = 0.0f;
@@ -22,11 +23,34 @@ public class ContentChunk : MonoBehaviour
             case ChunkTypes.JustBlocks:
                 this.GenerateChunkTypeJustBlocks();
                 break;
+            case ChunkTypes.CirculatingPlatforms:
+                this.GenerateChunkTypeCirculatingPlatforms();
+                break;
             default:
                 throw new NotImplementedException();
         }
 
         GenerateClouds();
+    }
+
+    public void GenerateChunkTypeCirculatingPlatforms()
+    {
+        var path = new List<Vector3>()
+        {
+            new Vector3(minX + 10, Utilities.GetYCenterAt(minX + 10) + Constants.PlayableAreaHeight / 2 - 5),
+            new Vector3(maxX - 10, Utilities.GetYCenterAt(maxX - 10) + Constants.PlayableAreaHeight / 2 - 5),
+            new Vector3(maxX - 10, Utilities.GetYCenterAt(maxX - 10) - Constants.PlayableAreaHeight / 2 + 5),
+            new Vector3(minX + 10, Utilities.GetYCenterAt(minX + 10) - Constants.PlayableAreaHeight / 2 + 5),
+            new Vector3(minX + 10, Utilities.GetYCenterAt(minX + 10) + Constants.PlayableAreaHeight / 2 - 5),
+        };
+
+        var movingPlatforms = settings.platformCount;
+
+        for (int i = 0; i < movingPlatforms; i++)
+        {
+            var newPlatform = Instantiate(movingPlatformPrefab, transform);
+            newPlatform.InitializeParams(path, 12, (float)i / (float)movingPlatforms);
+        }
     }
 
     public void GenerateChunkTypeJustBlocks()
@@ -84,7 +108,7 @@ public class ContentChunk : MonoBehaviour
 
             for (var j = 0; j < powerupCount; j++)
             {
-                var powerup = Instantiate(settings.powerUpPrefabs[i]);
+                var powerup = Instantiate(settings.powerUpPrefabs[i], transform);
                 powerup.position = RandomPosInChunk();
             }
         }

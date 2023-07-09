@@ -376,7 +376,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 829140260153759990, guid: 18fc4e970041ec901b230fbb978e9be1, type: 3}
       propertyPath: maxSecondsBeforeFall
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6465612884795057552, guid: 18fc4e970041ec901b230fbb978e9be1, type: 3}
       propertyPath: m_RootOrder
@@ -534,7 +534,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 16
+  orthographic size: 20
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -796,7 +796,7 @@ MonoBehaviour:
   m_Follow: {fileID: 1321840052}
   m_Lens:
     FieldOfView: 34
-    OrthographicSize: 16
+    OrthographicSize: 20
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -1156,7 +1156,7 @@ MonoBehaviour:
   playerTransform: {fileID: 1429802629}
   cameraSpeed: 2
   autoMoveCameraTimer: 2
-  maxCameraSpeed: 5
+  maxCameraSpeed: 8
   cameraSpeedupFactor: 0.05
 --- !u!4 &1321840052
 Transform:
@@ -1428,7 +1428,14 @@ MonoBehaviour:
   movingPlatformPrefab: {fileID: 7262784954771347655, guid: 195706e04f06a7f4d99d034aa598f083, type: 3}
   cloudPrefab: {fileID: 99288475354765782, guid: 335a6ff1bf7cee94a9782db2d2dab2ab, type: 3}
   scoreCounter: {fileID: 219757394}
-  basicChunk: {fileID: 11400000, guid: fe44fc6ad7d9cdf6c9b4fbecc514a6b6, type: 2}
+  chunks:
+  - {fileID: 11400000, guid: fe44fc6ad7d9cdf6c9b4fbecc514a6b6, type: 2}
+  - {fileID: 11400000, guid: bd1eafe1b96d4264d98e6f5038b28f9b, type: 2}
+  - {fileID: 11400000, guid: 62fcfc70000de9541a6903f3dc9a7fc6, type: 2}
+  - {fileID: 11400000, guid: b24902f23c5f5674c91344de0cd9731b, type: 2}
+  - {fileID: 11400000, guid: 184d7ae343a4ebe4cb34d7aa5c220c4c, type: 2}
+  - {fileID: 11400000, guid: 206817d4ab7a844439d07ee86d57f7ca, type: 2}
+  - {fileID: 11400000, guid: 9d92f1501d43cfa48afd3d223df6374b, type: 2}
 --- !u!4 &1527309041
 Transform:
   m_ObjectHideFlags: 0
@@ -1918,10 +1925,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dc722815df22507d998ce9842190c30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 9
+  moveSpeed: 12
   glidingFactor: 0.4
   jumpSpeed: 20
-  terminalSpeed: 60
+  terminalSpeed: 50
   fallSpeed: 5
   groundLayerMask:
     serializedVersion: 2
@@ -1932,9 +1939,9 @@ MonoBehaviour:
   coyoteTime: 0.3
   perfectGlideTime: 2
   taperedGlideTime: 2
-  jetpackDuration: 3.5
-  jetpackSpeedX: -20
-  jetpackSpeedY: 20
+  jetpackDuration: 2.5
+  jetpackSpeedX: -25
+  jetpackSpeedY: 25
   jetpackAcceleration: 150
 --- !u!50 &2098462800
 Rigidbody2D:

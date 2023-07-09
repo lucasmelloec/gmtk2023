@@ -21,3 +21,8 @@ MonoBehaviour:
   - 1
   powerUpPrefabs: []
   powerUpAmountMinMax: []
+  platformCount: 6
+  weightSequence:
+  - {x: 500, y: 1}
+  - {x: 1000, y: 5}
+  - {x: 1500, y: 0}

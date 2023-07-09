@@ -15,4 +15,6 @@ public class DifficultySetting : ScriptableObject
     public List<Vector2> powerUpAmountMinMax;
 
     public int platformCount;
+
+    public List<Vector2> weightSequence;
 }

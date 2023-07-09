@@ -44,3 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b191b9136e57e214c9a797fba6b08253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movingPlatformPrefab: {fileID: 7262784954771347655, guid: 195706e04f06a7f4d99d034aa598f083, type: 3}
+  minX: 0
+  maxX: 0
+  minY: 0
+  maxY: 0

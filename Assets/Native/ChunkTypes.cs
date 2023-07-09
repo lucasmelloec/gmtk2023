@@ -8,6 +8,7 @@ namespace Assets.Native
 {
     public enum ChunkTypes
     {
-        JustBlocks
+        JustBlocks,
+        CirculatingPlatforms
     }
 }

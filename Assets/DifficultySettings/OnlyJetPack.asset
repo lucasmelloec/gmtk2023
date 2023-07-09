@@ -10,21 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5bcaca041570937ff9d91efdcda65382, type: 3}
-  m_Name: Hard_AllFalling
+  m_Name: OnlyJetPack
   m_EditorClassIdentifier: 
   chunkType: 0
-  platformPrefabs:
-  - {fileID: 1935300455392668562, guid: 7255ee07eb5159f48a286213589a0670, type: 3}
-  - {fileID: 6465612884795057552, guid: 18fc4e970041ec901b230fbb978e9be1, type: 3}
-  platformWeights:
-  - 0
-  - 1
+  platformPrefabs: []
+  platformWeights: []
   powerUpPrefabs:
   - {fileID: 5685897294772345931, guid: 481a374038e130f449d4346247126455, type: 3}
   powerUpAmountMinMax:
-  - {x: -1, y: 1}
-  platformCount: 2
+  - {x: 4, y: 6}
+  platformCount: 0
   weightSequence:
-  - {x: 1000, y: 0}
-  - {x: 1500, y: 1}
-  - {x: 2000, y: 10}
+  - {x: 500, y: 0}
+  - {x: 1000, y: 1}
+  - {x: 2000, y: 3}
