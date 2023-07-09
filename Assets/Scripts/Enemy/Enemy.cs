@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IInteractable
 {
     public float moveSpeed = 5f;
 
@@ -55,5 +55,10 @@ public class Enemy : MonoBehaviour
         }
         Vector2 newVelocity = new Vector2(moveSpeed * movingDirection, rigidbody2d.velocity.y);
         rigidbody2d.velocity = newVelocity;
+    }
+
+    public void Interact(Player player)
+    {
+        throw new System.NotImplementedException();
     }
 }

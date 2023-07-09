@@ -1,5 +1,5 @@
-using Assets.Native;
 using System.Collections.Generic;
+using Assets.Native;
 using UnityEngine;
 
 public class ContentChunk : MonoBehaviour
@@ -13,6 +13,7 @@ public class ContentChunk : MonoBehaviour
     public float minY = 0.0f;
     public float maxY = 0.0f;
     List<Transform> chunkObjects = new List<Transform>();
+    DifficultySetting difficultySetting;
 
     public float fallingPlatformChance = 0.0f;
 
@@ -85,13 +86,15 @@ public class ContentChunk : MonoBehaviour
         Platform platformPrefab,
         FallingPlatform fallingPlatformPrefab,
         Transform cloudPrefab,
-        float fallingPlatformChance)
+        float fallingPlatformChance,
+        DifficultySetting difficultySetting)
     {
         this.chunkCenter = chunkCenter;
         this.platformPrefab = platformPrefab;
         this.fallingPlatformPrefab = fallingPlatformPrefab;
         this.cloudPrefab = cloudPrefab;
         this.fallingPlatformChance = fallingPlatformChance;
+        this.difficultySetting = difficultySetting;
 
         minX = chunkCenter.x - Constants.ChunkWidth / 2;
         maxX = chunkCenter.x + Constants.ChunkWidth / 5;
