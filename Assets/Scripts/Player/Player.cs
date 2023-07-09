@@ -1,3 +1,4 @@
+using Assets.Native;
 using System;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -20,6 +21,10 @@ public class Player : MonoBehaviour
     [SerializeField] private float coyoteTime = 0.3f;
     [SerializeField] private float perfectGlideTime = 0.5f;
     [SerializeField] private float taperedGlideTime = 2f;
+    [SerializeField] private float jetpackDuration = 2f;
+    [SerializeField] private float jetpackSpeedX = -50;
+    [SerializeField] private float jetpackSpeedY = -50;
+    [SerializeField] private float jetpackAcceleration = 1000;
     [SerializeField] private BoxCollider2D playerCollider;
     private PlayerInputActions playerInputActions;
     private Rigidbody2D rigidbody2d;
@@ -29,6 +34,7 @@ public class Player : MonoBehaviour
     private float timeElapsedSinceGrounded;
     private bool isCurrentlyGrounded;
     private Vector2 inputVector;
+    private DateTime jetpackingStart = DateTime.Now - TimeSpan.FromDays(1);
     private bool _isGliding = false;
     private bool isGliding
     {
@@ -99,7 +105,22 @@ public class Player : MonoBehaviour
 
     private void HandleMovement()
     {
-        Vector2 newVelocity = new Vector2(inputVector.x * moveSpeed, rigidbody2d.velocity.y);
+        var currentVelocity = rigidbody2d.velocity;
+        var targetSpeedX = inputVector.x * moveSpeed;
+        float xSpeed = rigidbody2d.velocity.x;
+
+        if (targetSpeedX < 0 && currentVelocity.x > targetSpeedX
+            || targetSpeedX > 0 && currentVelocity.x < targetSpeedX)
+        {
+            xSpeed = targetSpeedX;
+        }
+
+        if (IsGrounded())
+        {
+            xSpeed = targetSpeedX;
+        }
+
+        Vector2 newVelocity = new Vector2(xSpeed, rigidbody2d.velocity.y);
         if (!isGliding && inputVector.y != 0 && !isCurrentlyGrounded)
         {
             newVelocity.y += inputVector.y * fallSpeed;
@@ -108,6 +129,15 @@ public class Player : MonoBehaviour
         {
             newVelocity.y = newVelocity.y < 0 ? -terminalSpeed : terminalSpeed;
         }
+        if ((float)(DateTime.Now - jetpackingStart).TotalSeconds < jetpackDuration)
+        {
+            newVelocity = newVelocity + new Vector2(jetpackSpeedX, jetpackSpeedY).normalized * jetpackAcceleration * Time.fixedDeltaTime;
+            newVelocity = new Vector2(
+                Utilities.Clamp(newVelocity.x, -Math.Abs(jetpackSpeedX), Math.Abs(jetpackSpeedX)),
+                Utilities.Clamp(newVelocity.y, Math.Abs(jetpackSpeedY), Math.Abs(jetpackSpeedY))
+            );
+        }
+
         rigidbody2d.velocity = newVelocity;
     }
 
@@ -124,18 +154,21 @@ public class Player : MonoBehaviour
             return;
         }
 
-        float dynamicGlideFactor;
-        if (secondsGliding < perfectGlideTime)
+        if (rigidbody2d.velocity.y < 0)
         {
-            dynamicGlideFactor = glidingFactor;
+            float dynamicGlideFactor;
+            if (secondsGliding < perfectGlideTime)
+            {
+                dynamicGlideFactor = glidingFactor;
+            }
+            else
+            {
+                dynamicGlideFactor = (1.0f - (secondsGliding - perfectGlideTime) / taperedGlideTime) * glidingFactor;
+            }
+            Vector2 glidingVelocity = rigidbody2d.velocity;
+            glidingVelocity.y *= (1.0f - dynamicGlideFactor);
+            rigidbody2d.velocity = glidingVelocity;
         }
-        else
-        {
-            dynamicGlideFactor = (1.0f - (secondsGliding - perfectGlideTime) / taperedGlideTime) * glidingFactor;
-        }
-        Vector2 glidingVelocity = rigidbody2d.velocity;
-        glidingVelocity.y *= (1.0f - dynamicGlideFactor);
-        rigidbody2d.velocity = glidingVelocity;
     }
 
     private void HandleJump()
@@ -143,7 +176,7 @@ public class Player : MonoBehaviour
         if ((isJumping && lastJumpPressed + jumpBuffer > Time.time) && (IsGrounded() || (timeElapsedSinceGrounded <= coyoteTime && rigidbody2d.velocity.y <= 0)))
         {
             isJumping = false;
-            rigidbody2d.velocity = new Vector2(0f, jumpSpeed);
+            rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, jumpSpeed);
         }
     }
 
@@ -207,6 +240,16 @@ public class Player : MonoBehaviour
         if (playerHeadPos < cameraBottomPos - extraDistance)
         {
             isDead = true;
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Jetpack")
+        {
+            //rigidbody2d.velocity = new Vector3(-50, 50, 0);
+            Destroy(collision.gameObject);
+            jetpackingStart = DateTime.Now;
         }
     }
 }

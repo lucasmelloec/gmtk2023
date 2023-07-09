@@ -91,7 +91,7 @@ public class GameController : MonoBehaviour
         }
 
         var textMesh = scoreCounter.GetComponent<TextMeshProUGUI>();
-        textMesh.text = $"Score: {currentScore}";
+        textMesh.text = $"Score: {score}";
     }
 
     void PopulateWithContent()
