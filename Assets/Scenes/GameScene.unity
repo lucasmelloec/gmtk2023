@@ -374,6 +374,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FallingPlatform
       objectReference: {fileID: 0}
+    - target: {fileID: 829140260153759990, guid: 18fc4e970041ec901b230fbb978e9be1, type: 3}
+      propertyPath: maxSecondsBeforeFall
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6465612884795057552, guid: 18fc4e970041ec901b230fbb978e9be1, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -1059,11 +1063,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3594839983127857920, guid: 481a374038e130f449d4346247126455, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.04
+      value: -3.48
       objectReference: {fileID: 0}
     - target: {fileID: 3594839983127857920, guid: 481a374038e130f449d4346247126455, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.64
+      value: 11.36
       objectReference: {fileID: 0}
     - target: {fileID: 3957999965635572945, guid: 481a374038e130f449d4346247126455, type: 3}
       propertyPath: m_Name
@@ -1113,7 +1117,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1149,10 +1154,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 1429802629}
-  cameraSpeed: 0
+  cameraSpeed: 2
   autoMoveCameraTimer: 2
   maxCameraSpeed: 5
-  cameraSpeedupFactor: 0
+  cameraSpeedupFactor: 0.05
 --- !u!4 &1321840052
 Transform:
   m_ObjectHideFlags: 0
@@ -1958,9 +1963,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dc722815df22507d998ce9842190c30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 7
-  glidingFactor: 0.8
-  jumpSpeed: 10
+  moveSpeed: 9
+  glidingFactor: 0.4
+  jumpSpeed: 20
   terminalSpeed: 60
   fallSpeed: 5
   groundLayerMask:

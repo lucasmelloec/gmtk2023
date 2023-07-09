@@ -34,7 +34,7 @@ public class ContentChunk : MonoBehaviour
         var totalWeight = settings.platformWeights.Sum();
         var probabilityArray = settings.platformWeights.Select(weight => weight / totalWeight).ToList();
 
-        for (var i = 0; i < 10; i++)
+        for (var i = 0; i < settings.platformCount; i++)
         {
             Transform selectedPrefab = settings.platformPrefabs[0];
             var prefabDice = UnityEngine.Random.Range(0f, 1f);
@@ -46,24 +46,17 @@ public class ContentChunk : MonoBehaviour
                 }
             }
 
-            var x = float.NaN;
-            var y = float.NaN;
             var collides = false;
-
-            x = UnityEngine.Random.Range(minX, maxX);
-            y = UnityEngine.Random.Range(minY, maxY);
 
             // 5 tentativas de colocar a plataforma
             for (var j = 0; j < 5; j++)
             {
-                x = UnityEngine.Random.Range(minX, maxX);
-                y = UnityEngine.Random.Range(minY, maxY);
-
+                var pos = RandomPosInChunk();
                 collides = false;
 
                 foreach (var chunkObject in chunkObjects)
                 {
-                    if (Platform.Intersects(chunkObject.position, new Vector3(x, y, 0)))
+                    if (Platform.Intersects(chunkObject.position, pos))
                     {
                         collides = true;
                     }
@@ -72,10 +65,27 @@ public class ContentChunk : MonoBehaviour
                 if (!collides)
                 {
                     var newPlat = Instantiate(selectedPrefab, transform);
-                    newPlat.transform.position = new Vector3(x, y, 0);
+                    newPlat.transform.position = pos;
                     chunkObjects.Add(newPlat.transform);
                     break;
                 }
+            }
+        }
+
+        GeneratePowerups();
+    }
+
+    public void GeneratePowerups()
+    {
+        for (int i = 0; i < settings.powerUpAmountMinMax.Count; i++)
+        {
+            var countRange = settings.powerUpAmountMinMax[i];
+            var powerupCount = (int)UnityEngine.Random.Range(countRange.x, (float)(Math.Floor((double)countRange.y + 1) - 0.01f));
+
+            for (var j = 0; j < powerupCount; j++)
+            {
+                var powerup = Instantiate(settings.powerUpPrefabs[i]);
+                powerup.position = RandomPosInChunk();
             }
         }
     }
@@ -105,6 +115,13 @@ public class ContentChunk : MonoBehaviour
         newCloud.position = new Vector3(x, y, 0);
     }
 
+    public Vector3 RandomPosInChunk()
+    {
+        var x = UnityEngine.Random.Range(minX, maxX);
+        var y = UnityEngine.Random.Range(-Constants.PlayableAreaHeight / 2.0f, Constants.PlayableAreaHeight / 2.0f) + Utilities.GetYCenterAt(x);
+        return new Vector3(x, y);
+    }
+
     public void InitializeParams(
         Vector3 chunkCenter,
         Transform cloudPrefab,
@@ -115,7 +132,7 @@ public class ContentChunk : MonoBehaviour
         this.settings = difficultySetting;
 
         minX = chunkCenter.x - Constants.ChunkWidth / 2;
-        maxX = chunkCenter.x + Constants.ChunkWidth / 5;
+        maxX = chunkCenter.x + Constants.ChunkWidth / 2;
         minY = Constants.ChunkMinY + Utilities.GetYCenterAt(chunkCenter.x);
         maxY = Constants.ChunkMaxY + Utilities.GetYCenterAt(chunkCenter.x);
     }

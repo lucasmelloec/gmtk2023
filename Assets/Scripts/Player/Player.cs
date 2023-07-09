@@ -143,8 +143,7 @@ public class Player : MonoBehaviour
 
     private void HandleGlide()
     {
-        float minimumGlideSpeed = -8f;
-        if (!isGliding || rigidbody2d.velocity.y >= 0 || IsGrounded() || rigidbody2d.velocity.y >= minimumGlideSpeed) return;
+        if (!isGliding || rigidbody2d.velocity.y >= 0 || IsGrounded()) return;
         var now = DateTime.Now;
         var secondsGliding = (float)(now - glideStartTime).TotalSeconds;
         if (secondsGliding > perfectGlideTime + taperedGlideTime)
@@ -154,21 +153,18 @@ public class Player : MonoBehaviour
             return;
         }
 
-        if (rigidbody2d.velocity.y < 0)
+        float dynamicGlideFactor;
+        if (secondsGliding < perfectGlideTime)
         {
-            float dynamicGlideFactor;
-            if (secondsGliding < perfectGlideTime)
-            {
-                dynamicGlideFactor = glidingFactor;
-            }
-            else
-            {
-                dynamicGlideFactor = (1.0f - (secondsGliding - perfectGlideTime) / taperedGlideTime) * glidingFactor;
-            }
-            Vector2 glidingVelocity = rigidbody2d.velocity;
-            glidingVelocity.y *= (1.0f - dynamicGlideFactor);
-            rigidbody2d.velocity = glidingVelocity;
+            dynamicGlideFactor = glidingFactor;
         }
+        else
+        {
+            dynamicGlideFactor = (1.0f - (secondsGliding - perfectGlideTime) / taperedGlideTime) * glidingFactor;
+        }
+        Vector2 glidingVelocity = rigidbody2d.velocity;
+        glidingVelocity.y *= (1.0f - dynamicGlideFactor);
+        rigidbody2d.velocity = glidingVelocity;
     }
 
     private void HandleJump()

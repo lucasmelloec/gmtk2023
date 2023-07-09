@@ -13,4 +13,6 @@ public class DifficultySetting : ScriptableObject
 
     public List<Transform> powerUpPrefabs;
     public List<Vector2> powerUpAmountMinMax;
+
+    public int platformCount;
 }
