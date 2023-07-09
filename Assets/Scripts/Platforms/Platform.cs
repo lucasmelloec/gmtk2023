@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Platform : MonoBehaviour
 {
+    [SerializeField] private BoxCollider2D platformCollider;
+
     public static bool Intersects(Platform platform0, Transform platform1Center)
     {
         return Intersects(platform0.transform, platform1Center);
@@ -23,4 +25,6 @@ public class Platform : MonoBehaviour
 
         return bounds0.Intersects(bounds1);
     }
+
+    public Bounds bounds { get => platformCollider.bounds; }
 }

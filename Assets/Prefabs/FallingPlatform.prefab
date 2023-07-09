@@ -285,6 +285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 061e5d75c1b70ea409a93245dfc5b71a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  platformCollider: {fileID: 2803394107603231805}
   <maxSecondsBeforeColorChange>k__BackingField: 0.5
   maxSecondsBeforeFall: 5
 --- !u!4 &6465612884795057552 stripped
