@@ -1,5 +1,5 @@
-using Assets.Native;
 using System;
+using Assets.Native;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float jetpackSpeedX = -50;
     [SerializeField] private float jetpackSpeedY = -50;
     [SerializeField] private float jetpackAcceleration = 1000;
-    [SerializeField] private BoxCollider2D playerCollider;
+    private BoxCollider2D playerCollider;
     private PlayerInputActions playerInputActions;
     private Rigidbody2D rigidbody2d;
     private float storedGlideTime = 0.0f;
@@ -49,6 +49,12 @@ public class Player : MonoBehaviour
     private float lastJumpPressed;
     private float jumpBuffer = 0.2f;
     private bool isJumping;
+    private Vector2 moveDirection = Vector2.left;
+
+    public void Throw()
+    {
+        rigidbody2d.AddForce(new Vector2(-25, 25), ForceMode2D.Impulse);
+    }
 
     private void Awake()
     {
@@ -59,6 +65,7 @@ public class Player : MonoBehaviour
         rigidbody2d = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         storedGlideTime = perfectGlideTime + taperedGlideTime;
+        playerCollider = GetComponent<BoxCollider2D>();
     }
 
     private void Start()
@@ -70,6 +77,7 @@ public class Player : MonoBehaviour
     {
         playerInputActions.Player.Glide.started += PlayerInputActions_Glide_Started;
         playerInputActions.Player.Glide.canceled += PlayerInputActions_Glide_Canceled;
+        playerInputActions.Player.Interact.performed += PlayerInputActions_Interact_Performed;
     }
 
     private void FixedUpdate()
@@ -82,6 +90,14 @@ public class Player : MonoBehaviour
     private void Update()
     {
         inputVector = playerInputActions.Player.Move.ReadValue<Vector2>();
+        if (inputVector.x < 0)
+        {
+            moveDirection = Vector2.left;
+        }
+        else if (inputVector.x > 0)
+        {
+            moveDirection = Vector2.right;
+        }
         isCurrentlyGrounded = IsGrounded();
         if (isCurrentlyGrounded)
         {
@@ -115,10 +131,10 @@ public class Player : MonoBehaviour
             xSpeed = targetSpeedX;
         }
 
-        if (IsGrounded())
-        {
-            xSpeed = targetSpeedX;
-        }
+        /* if (IsGrounded()) */
+        /* { */
+        /*     xSpeed = targetSpeedX; */
+        /* } */
 
         Vector2 newVelocity = new Vector2(xSpeed, rigidbody2d.velocity.y);
         if (!isGliding && inputVector.y != 0 && !isCurrentlyGrounded)
@@ -246,6 +262,19 @@ public class Player : MonoBehaviour
             //rigidbody2d.velocity = new Vector3(-50, 50, 0);
             Destroy(collision.gameObject);
             jetpackingStart = DateTime.Now;
+        }
+    }
+
+    private void PlayerInputActions_Interact_Performed(InputAction.CallbackContext context)
+    {
+        float extraDistance = 0.1f;
+        var raycastHit = Physics2D.Raycast(playerCollider.bounds.center - new Vector3(0f, playerCollider.bounds.extents.y), moveDirection, playerCollider.bounds.extents.x + extraDistance, murderLayerMask);
+        if (raycastHit.collider != null)
+        {
+            if (raycastHit.collider.TryGetComponent<IInteractable>(out var interactable))
+            {
+                interactable.Interact(this);
+            }
         }
     }
 }

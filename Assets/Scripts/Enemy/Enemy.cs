@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour, IInteractable
@@ -59,6 +60,14 @@ public class Enemy : MonoBehaviour, IInteractable
 
     public void Interact(Player player)
     {
-        throw new System.NotImplementedException();
+        gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+        StartCoroutine(ThrowPlayer(player));
+    }
+
+    private IEnumerator ThrowPlayer(Player player)
+    {
+        yield return null;
+        player.Throw();
     }
 }
+
