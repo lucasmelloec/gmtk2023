@@ -3,7 +3,12 @@ using UnityEngine;
 
 public class Platform : MonoBehaviour
 {
-    [SerializeField] private BoxCollider2D platformCollider;
+    private BoxCollider2D platformCollider;
+
+    protected virtual void Awake()
+    {
+        platformCollider = GetComponent<BoxCollider2D>();
+    }
 
     public static bool Intersects(Platform platform0, Transform platform1Center)
     {

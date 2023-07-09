@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7760506581802535246}
   - component: {fileID: 416801132085835485}
-  - component: {fileID: 2803394107603231805}
   - component: {fileID: 8679780039884456730}
   m_Layer: 6
   m_Name: FallingPlatformVisual
@@ -86,51 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &2803394107603231805
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3802899234403138269}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
 --- !u!114 &8679780039884456730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,6 +156,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1935300455392668562, guid: 7255ee07eb5159f48a286213589a0670, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725977184013200956, guid: 7255ee07eb5159f48a286213589a0670, type: 3}
+      propertyPath: m_Size.x
+      value: 5.6927
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725977184013200956, guid: 7255ee07eb5159f48a286213589a0670, type: 3}
+      propertyPath: m_Size.y
+      value: 0.4533
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725977184013200956, guid: 7255ee07eb5159f48a286213589a0670, type: 3}
+      propertyPath: m_Offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725977184013200956, guid: 7255ee07eb5159f48a286213589a0670, type: 3}
+      propertyPath: m_Offset.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3830721900304417710, guid: 7255ee07eb5159f48a286213589a0670, type: 3}
@@ -285,7 +255,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 061e5d75c1b70ea409a93245dfc5b71a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platformCollider: {fileID: 2803394107603231805}
   <maxSecondsBeforeColorChange>k__BackingField: 0.5
   maxSecondsBeforeFall: 5
 --- !u!4 &6465612884795057552 stripped

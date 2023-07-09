@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
 {
     public static Player singleton { get; private set; }
     public event Action<bool> onIsGlidingChanged;
+    public bool isArrested { get; private set; }
+    public bool isDead { get; private set; }
 
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float glidingFactor = 0.4f; // 1 = total glide, 0 = no glide
@@ -14,6 +16,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float terminalSpeed = 50f;
     [SerializeField] private float fallSpeed = 10f;
     [SerializeField] private LayerMask groundLayerMask;
+    [SerializeField] private LayerMask murderLayerMask;
     [SerializeField] private float coyoteTime = 0.3f;
     [SerializeField] private float perfectGlideTime = 0.5f;
     [SerializeField] private float taperedGlideTime = 2f;
@@ -36,6 +39,7 @@ public class Player : MonoBehaviour
             onIsGlidingChanged?.Invoke(_isGliding);
         }
     }
+    private CameraController cameraController;
 
     private void Awake()
     {
@@ -46,6 +50,11 @@ public class Player : MonoBehaviour
         rigidbody2d = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         storedGlideTime = perfectGlideTime + taperedGlideTime;
+    }
+
+    private void Start()
+    {
+        cameraController = CameraController.singleton;
     }
 
     private void OnEnable()
@@ -74,6 +83,8 @@ public class Player : MonoBehaviour
             timeElapsedSinceGrounded += Time.deltaTime;
         }
         transform.rotation = Quaternion.identity;
+        HandleMurder();
+        HandleDeath();
     }
 
     private void OnDisable()
@@ -163,5 +174,32 @@ public class Player : MonoBehaviour
         /* Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, 0), Vector2.down * (playerCollider.bounds.extents.y + extraGroundDistance), rayColor); */
         /* Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, playerCollider.bounds.extents.y + extraGroundDistance), Vector2.right * 2 * playerCollider.bounds.extents.x, rayColor); */
         return raycastHit.collider != null;
+    }
+
+    private void HandleMurder()
+    {
+        float extraGroundDistance = 0.01f;
+        var raycastHit = Physics2D.Raycast(playerCollider.bounds.center, Vector2.down, playerCollider.bounds.extents.y + extraGroundDistance, murderLayerMask);
+        if (raycastHit.collider != null)
+        {
+            if (raycastHit.collider.TryGetComponent<Enemy>(out var enemy))
+            {
+                if (rigidbody2d.velocity.y <= 0)
+                {
+                    isArrested = true;
+                }
+            }
+        }
+    }
+
+    private void HandleDeath()
+    {
+        float playerHeadPos = transform.position.y + playerCollider.bounds.extents.y;
+        float cameraBottomPos = cameraController.position.y - cameraController.cameraHeight / 2;
+        float extraDistance = 10f;
+        if (playerHeadPos < cameraBottomPos - extraDistance)
+        {
+            isDead = true;
+        }
     }
 }

@@ -1,6 +1,6 @@
-using Assets.Native;
 using System;
 using System.Collections;
+using Assets.Native;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
     public static CameraController singleton { get; private set; }
     public float cameraWidth { get; private set; }
     public float cameraHeight { get; private set; }
+    public Vector2 position { get => transform.position; }
 
     [SerializeField] private Transform playerTransform;
     [SerializeField] private float cameraSpeed = 5f;

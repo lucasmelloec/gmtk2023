@@ -1,11 +1,20 @@
-using System.Collections.Generic;
-using UnityEngine;
-using Assets.Native;
 using System;
+using System.Collections.Generic;
+using Assets.Native;
 using TMPro;
+using UnityEngine;
+using UnityEngine.Assertions;
 
 public class GameController : MonoBehaviour
 {
+    public enum State
+    {
+        GamePlaying,
+        GameOver,
+    }
+    public static GameController singleton { get; private set; }
+    public event Action<State> onGameStateChanged;
+
     [SerializeField] private Player player;
     [SerializeField] private ContentChunk contentChunkPrefab;
     [SerializeField] private Platform platformPrefab;
@@ -20,10 +29,27 @@ public class GameController : MonoBehaviour
     private const float yLowerBound = -20;
     float score = 0.0f;
     private CameraController cameraController;
+    private State _gameState = State.GamePlaying;
+    private State gameState
+    {
+        get => _gameState;
+        set
+        {
+            _gameState = value;
+            onGameStateChanged?.Invoke(_gameState);
+        }
+    }
 
     private static Queue<ContentChunk> contentChunks = new Queue<ContentChunk>();
 
-    void Start() {
+    void Awake()
+    {
+        Assert.IsNull(singleton);
+        singleton = this;
+    }
+
+    void Start()
+    {
         cameraController = CameraController.singleton;
 
         var tempPlat = Instantiate(movingPlatformPrefab);
@@ -38,8 +64,20 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        PopulateWithContent();
-        UpdateScore();
+        switch (gameState)
+        {
+            case State.GamePlaying:
+                PopulateWithContent();
+                UpdateScore();
+                if (player.isArrested || player.isDead)
+                {
+                    Time.timeScale = 0f;
+                    gameState = State.GameOver;
+                }
+                break;
+            case State.GameOver:
+                break;
+        }
     }
 
     void UpdateScore()
@@ -62,7 +100,7 @@ public class GameController : MonoBehaviour
         {
             var newCenter = new Vector3(leftmostContentX - Constants.ChunkWidth / 2, 0);
             var newChunk = Instantiate(contentChunkPrefab);
-            newChunk.InitializeParams(newCenter, platformPrefab, fallingPlatformPrefab, cloudPrefab, Utilities.Clamp((-newCenter.x)/150, 0f, 0.6f));
+            newChunk.InitializeParams(newCenter, platformPrefab, fallingPlatformPrefab, cloudPrefab, Utilities.Clamp((-newCenter.x) / 150, 0f, 0.6f));
 
             leftmostContentX = newChunk.minX;
             contentChunks.Enqueue(newChunk);
@@ -86,7 +124,7 @@ public class GameController : MonoBehaviour
     Vector3 GetCameraBoundStart()
     {
         // set up correct bound later;
-          return cameraController.GetCurrentPosition() - new Vector3(cameraController.cameraWidth / 2, -cameraController.cameraHeight / 2);
+        return cameraController.GetCurrentPosition() - new Vector3(cameraController.cameraWidth / 2, -cameraController.cameraHeight / 2);
     }
 
     Vector3 GetCameraBoundEnd()

@@ -5,7 +5,7 @@ public class Enemy : MonoBehaviour
     public float moveSpeed = 5f;
 
     [SerializeField] private Platform platform;
-    [SerializeField] private BoxCollider2D enemyCollider;
+    private BoxCollider2D enemyCollider;
     private int movingDirection;
     private Rigidbody2D rigidbody2d;
 
@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
+        enemyCollider = GetComponent<BoxCollider2D>();
         float randomDirection = Random.Range(0f, 1f);
         if (randomDirection <= 0.5f)
         {
@@ -28,7 +29,8 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void Update() {
+    private void Update()
+    {
         transform.rotation = Quaternion.identity;
     }
 
@@ -47,8 +49,9 @@ public class Enemy : MonoBehaviour
         float rightMostPlatformBound = platformBounds.center.x + platformBounds.extents.x;
         float leftMostEnemyBody = enemyBounds.center.x - enemyBounds.extents.x * enlargmentFactor;
         float rightMostEnemyBody = enemyBounds.center.x + enemyBounds.extents.x * enlargmentFactor;
-        if (leftMostEnemyBody <= leftMostPlatformBound || rightMostEnemyBody >= rightMostPlatformBound) {
-          movingDirection *= -1;
+        if (leftMostEnemyBody <= leftMostPlatformBound || rightMostEnemyBody >= rightMostPlatformBound)
+        {
+            movingDirection *= -1;
         }
         Vector2 newVelocity = new Vector2(moveSpeed * movingDirection, rigidbody2d.velocity.y);
         rigidbody2d.velocity = newVelocity;
