@@ -23,6 +23,8 @@ public class GameController : MonoBehaviour
     [SerializeField] private Transform cloudPrefab;
     [SerializeField] private Transform scoreCounter;
 
+    [SerializeField] private DifficultySetting basicChunk;
+
     private float leftmostContentX = -10f;
     private const float contentBufferWidthX = 30;
     private const float yUpperBound = 20;
@@ -100,7 +102,7 @@ public class GameController : MonoBehaviour
         {
             var newCenter = new Vector3(leftmostContentX - Constants.ChunkWidth / 2, 0);
             var newChunk = Instantiate(contentChunkPrefab);
-            newChunk.InitializeParams(newCenter, platformPrefab, fallingPlatformPrefab, cloudPrefab, Utilities.Clamp((-newCenter.x) / 150, 0f, 0.6f), null);
+            newChunk.InitializeParams(newCenter, cloudPrefab, basicChunk);
 
             leftmostContentX = newChunk.minX;
             contentChunks.Enqueue(newChunk);
