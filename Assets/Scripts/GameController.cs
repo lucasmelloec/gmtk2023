@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Native;
+using System;
+using TMPro;
 
 public class GameController : MonoBehaviour
 {
@@ -10,11 +12,13 @@ public class GameController : MonoBehaviour
     [SerializeField] private FallingPlatform fallingPlatformPrefab;
     [SerializeField] private MovingPlatform movingPlatformPrefab;
     [SerializeField] private Transform cloudPrefab;
+    [SerializeField] private Transform scoreCounter;
 
     private float leftmostContentX = -10f;
     private const float contentBufferWidthX = 30;
     private const float yUpperBound = 20;
     private const float yLowerBound = -20;
+    float score = 0.0f;
     private CameraController cameraController;
 
     private static Queue<ContentChunk> contentChunks = new Queue<ContentChunk>();
@@ -35,6 +39,21 @@ public class GameController : MonoBehaviour
     void Update()
     {
         PopulateWithContent();
+        UpdateScore();
+    }
+
+    void UpdateScore()
+    {
+        var currentScore = Math.Abs(player.transform.position.x);
+        currentScore = (float)(int)currentScore;
+
+        if (currentScore > score)
+        {
+            score = currentScore;
+        }
+
+        var textMesh = scoreCounter.GetComponent<TextMeshProUGUI>();
+        textMesh.text = $"Score: {currentScore}";
     }
 
     void PopulateWithContent()
